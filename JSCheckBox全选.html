@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>JSCheckBox全选</title>
+		<!-- 引入jq文件 -->
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+		<style>
+			.grade{
+				/* border: 1px solid #e6e6e6; */
+				width: 400px;
+				text-align: center;
+				border-collapse: collapse;
+				
+			}
+			.grade td, .grade th{
+				border: 1px solid #e6e6e6;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<table class="grade">
+				<thead>
+					<tr>
+						<th><input type="checkbox" id="selectAll" onclick="selectedAll()"><span>&nbsp;&nbsp;全选</span></th>
+						<th>姓名</th>
+						<th>性别</th>
+						<th>班级</th>
+						<th>成绩</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input type="checkbox" id="selected"></td>
+						<td>李雷</td>
+						<td>男</td>
+						<td>1班</td>
+						<td>103</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="selected"></td>
+						<td>张三</td>
+						<td>男</td>
+						<td>2班</td>
+						<td>13</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="selected"></td>
+						<td>李红</td>
+						<td>女</td>
+						<td>3班</td>
+						<td>100</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+	<script>
+		//设置全选的复选框选中下面的复选框也全被选中;如果全选框取消选中,下面的则全不选;
+		//这里只是有全选那个复选框来控制底下的复选框,如果全选选中后在底下的复选框中手动取消选中
+		function selectedAll(){
+			$('input[id=selected]').prop('checked',$('input[id=selectAll]').prop('checked'));
+		}
+		//由底下的复选框没有被全部选中则全选的复选框的checked值为false,全选中后全选框checked为true
+		$('input[id=selected]').click(function(){
+			$("input[id=selected]").each(function(){
+			    if(!$(this).prop('checked')){//当底下的复选框checked的值有不为真时
+			        $("#selectAll").prop('checked',false);//把全选的设置为未选中checked=false
+			        return false;//return false 由于jq的each()方法接受false返回值来提前停止循环
+			    }else {
+			        $("#selectAll").prop('checked',true);//底下复选框checked值全为true,自动把全选设置为true
+			    }
+			});
+		})
+	</script>
+</html>
