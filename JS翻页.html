@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>JS实现翻页</title>
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+		<style>
+			.first {
+			    color: #666;
+			    display: inline-block;
+			    vertical-align: top;
+			    border: 1px solid #e6e6e6;
+			    padding: 5px 9px;
+			    font-size: 12px;
+			}
+			#number {
+			    display: inline-block;
+			    vertical-align: top;
+			}
+			.num{
+				color: #666;
+				display: inline-block;
+				vertical-align: top;
+				border: 1px solid #e6e6e6;
+				padding: 5px 9px;
+				font-size: 12px;
+				margin-right: 6px;
+			}
+			.current {
+			    color: #3e89fa;
+			    font-size: 12px;
+			    display: inline-block;
+			    vertical-align: top;
+			    margin-left: 30px;
+			    padding: 5px 9px;
+			}
+			.jump {
+			    display: inline-block;
+			    vertical-align: top;
+			    font-size: 12px;
+			}
+			#inp {
+			    height: 22px;
+			    width: 30px;
+			}
+			.btn-jump {
+			    display: inline-block;
+			    vertical-align: top;
+			    padding: 5px 9px;
+			    border: 1px solid #e6e6e6;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div class="first" id="home">首页</div>
+			<div class="first" id="before">上一页</div>
+			<div id="number">
+				
+			</div>
+			
+			<div class="first" id="next">下一页</div>
+			<div class="first" id="last">尾页</div>
+			<div class="current"></div>
+			<div class="jump">
+				<input type="text" id="inp" />
+				<div class="btn-jump">跳转</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		var sign = 1//记录当前第几个块
+		var b_sign = 1;//记录sign变动之前的sign数值
+		var count = 20//记录总页数
+		var real_count = count <= 10 ? count :10;//定义最多有多少块
+		var real_change = 0;
+		var o = 0;
+		if(real_count % 2 == 0){
+			real_change = real_count / 2;
+		}else{
+			real_change = real_count / 2 + 0.5;
+			var o = 1;
+		}
+		let i = 1;
+		while(i <= real_count){//插入最多的页码块
+			var val = '<div class ="num" id="'+ i +'">' + i + '</div>';
+			$('#number').append(val);
+			i++;
+		}
+		function query_all(){
+			nodes = $('#number').find('div');
+			length = nodes.length;
+		}
+		query_all();//nodes里是id为number的每个div后代
+		
+		function currentPage(){//获取当前的page
+			let use = "#" + sign;
+			$('.current').text('当前' + $(use).text() + '/' + count + '页');
+		}
+		currentPage();
+		
+		var b_change = function(){//还原之前被选中的页码块
+			b_sign = sign;
+			let use = '#' + b_sign;
+			$(use).css({'border':'1px solid #e6e6e6','color':'#666' });
+		}
+		
+		var blue_change = function(c){//设置被选中页码的样式区别于其他未被选中的块
+			let use = '#' + c;
+			$(use).css({'border':'none','color': '#3e89fa'});
+		}
+		blue_change(sign);//第一次加载时初始化
+		
+		function go_back(now_sign,kit){
+			b_change();
+			if(kit == 0){
+				sign = now_sign;
+			}else if(kit == 1){
+				if(sign != realcount)
+				sign++;
+			}else if(kit == 2){
+				if(sign != 1)
+				sign--;
+			}
+			blue_change(sign);
+		}
+		function change_add(c_add,kit){
+			let p = c_add;
+			for(let j = 0;j < length;j++){
+				if(kit == 0){
+					nodes[j].innerHTML = p;
+					p++;
+				}else if(kit == 1){
+					nodes[j].innerHTML = p;
+					p--;
+				}else if(kit == 2){
+					nodes[j].innerHTML = parseInt(nodes[j].innerHTML) + 1;
+				}else if(kit == 3){
+					nodes[j].innerHTML = parseInt(nodes[j].innerHTML) - 1;
+				}
+			}
+		}
+		function for_num(use,id){
+			let error_1 = '#' + real_change;
+			if($(error_1).text() == real_change || $(error_1).text() == real_change + 1){
+				if($(use).text() <= real_change || $(use).text() > count - real_change){
+					go_back(id,0);
+				}else{
+					go_back(real_change,0);
+					change_add($(use).text() - (real_change - 1),0);
+				}
+				currentPage();
+			}else{
+				var inner = (o == 0) ? $(use).text() >= count - real_change : $(use).text() > count - real_change;
+				if($(use).text() <= real_change || inner){
+					if($(use).text() <= real_change){
+						go_back($(use).text(),0);
+						change_add(1,0);
+					}else{
+						go_back(real_count - (count - $(use).text()),0);
+						change_add(count-real_count + 1,0);
+					}
+					
+				}else{
+					go_back(real_change,0);
+					change_add($(use).text() - (real_change - 1),0);
+				}
+			}
+			currentPage();
+		}
+		for(let j = 0 ; j < length;j++){
+			let id = nodes[j].getAttribute('id');
+			let use = '#' + id;
+			$(use).bind('click',function(){
+				for_num(use,id);
+			});
+		}
+		$('#home').bind('click',function(){
+			go_back(1,0);
+			change_add(1,0);
+			currentPage();
+		});
+		$('#before').bind('click',function(){
+			let use = '#' + sign;
+			var inner = (o == 0) ? $(use).text() >= count - real_change : $(use).text() > count - real_change + 1;
+			if($(use).text() <= real_change || inner){
+				go_back(0,2);
+				currentPage();
+			}else{
+				change_add(0,3);
+				currentPage();
+			}
+		});
+		$('#next').bind('click',function(){
+			let use = '#' + sign;
+			if($(use).text() != count){
+				var inner = (o == 0) ? $(use).text() >= count - real_change : $(use).text() > count - real_change;
+				if($(use).text() < real_change || inner){
+					go_back(0,1);
+					currentPage();
+				}else{
+					change_add(0,2);
+					currentPage();
+				}
+			}
+		});
+		$('.btn-jump').bind('click',function(){
+			let val = $('#inp').val();
+			val = parseInt(val);
+			if(val >= 1 && val <= count){
+				var inner = (o == 0) ? val >= count -real_change : val > count - real_change;
+				if(val <= real_change || inner){
+					if(val <= real_change){
+						go_back(val,0);
+						change_add(1,0);
+					}else{
+						go_back(real_count - (count - val),0);
+						change_add(count - real_count + 1,0);
+					}
+				}else{
+					alert('error page out ');
+				}
+				currentPage();
+			}
+		});
+	</script>
+</html>
