@@ -32,21 +32,21 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td><input type="checkbox" id="selected"></td>
+						<td><input type="checkbox" name="selected"></td>
 						<td>李雷</td>
 						<td>男</td>
 						<td>1班</td>
 						<td>103</td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" id="selected"></td>
+						<td><input type="checkbox" name="selected"></td>
 						<td>张三</td>
 						<td>男</td>
 						<td>2班</td>
 						<td>13</td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" id="selected"></td>
+						<td><input type="checkbox" name="selected"></td>
 						<td>李红</td>
 						<td>女</td>
 						<td>3班</td>
@@ -63,8 +63,8 @@
 			$('input[id=selected]').prop('checked',$('input[id=selectAll]').prop('checked'));
 		}
 		//由底下的复选框没有被全部选中则全选的复选框的checked值为false,全选中后全选框checked为true
-		$('input[id=selected]').click(function(){
-			$("input[id=selected]").each(function(){
+		$('input[name=selected]').click(function(){
+			$("input[name=selected]").each(function(){
 			    if(!$(this).prop('checked')){//当底下的复选框checked的值有不为真时
 			        $("#selectAll").prop('checked',false);//把全选的设置为未选中checked=false
 			        return false;//return false 由于jq的each()方法接受false返回值来提前停止循环
