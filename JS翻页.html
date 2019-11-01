@@ -32,6 +32,7 @@
 			.page:hover{
 				cursor: pointer;
 			}
+			
 		</style>
 	</head>
 	<body>
@@ -47,47 +48,106 @@
 		</div>
 	</body>
 	<script>
+		//变量区
 		var curPage = 1;//当前页数初始为1
 		var pageShow = 5;//一次展示的页码数
 		var sumPage = 10;//总页数
-		var str = '';//展示页码
+		
+		//方法区
 		//先展示pageNum页码部分类似12345;23456;678910;当前页码不大于一次展示页码数的一半
 		function showPage(curPage){
+			var str = '';//展示页码
+			
 			if(pageShow % 2 == 0){//一次展示的页码数是偶数的话通常是奇数这样中间就是一个页码
 				
 			}else{
 				if(curPage <= (pageShow + 1) / 2){
 				
-					for(var i = 1;i <= pageShow;i++){
+					for(i = 1;i <= pageShow;i++){
 						str += '<div class="page number" id="' + i + '">'+ i +'</div>';
 					}
-				}else if(curPage < (sumPage + sumPage - pageShow + 1) / 2){
-					
-					var i= curPage - (pageShow + 1) / 2;
-					for( ;i <= (curPage + (pageShow + 1) / 2);i++){
-						debugger;
+				}else if(curPage < ((sumPage + sumPage - pageShow + 1) / 2)){
+					var startlth = parseInt(curPage) - (pageShow - 1) / 2
+					var maxlth = (parseInt(curPage) + (pageShow - 1) / 2)
+					for(i = startlth;i <= maxlth;i++){
+						
 						str += '<div class="page number" id="'+i+'">'+ i +'</div>';
 					}
 				}else{
-					for(var i = sumPage - pageShow + 1;i <= sumPage;i++){
+					for(i = sumPage - pageShow + 1;i <= sumPage;i++){
 						str += '<div class="page number" id="' + i + '">' + i + '</div>';
 					}
 				}
 				$('#pageNum').html(str);
+				delBorder(curPage);//初始化选中页码1,每次展示页码改变是改变选中的页码的border为none因为动态生成不用重置其他的
 			}
+			
 		}
 		showPage(1);//初始化第一次的页面
-		$('.number').click(function(){
-			
-			curPage = $(this).attr('id');
+		
+		//跳首页
+		function goFirst(){
+			curPage = 1;
 			showPage(curPage);
+		}
+		//跳尾页
+		function goLast(){
+			curPage = sumPage;
+			showPage(curPage);
+		}
+		//上一页
+		function goPre(){
+			curPage--;
+			showPage(curPage);
+		}
+		//下一页
+		function goAfter(){
+			curPage++;
+			showPage(curPage);
+		}
+		//改变选中页码的样式border取消
+		function delBorder(curPage){
+			var node = $('#' + curPage)
+			node.css('border','none');
 			
-		});
+			console.log('取消border',node[0])
+		}
+		
+		//事件绑定区
 		$(function(){
+			//跳转按钮点击事件
 			$(document).on('click','.jumpBtn',function(){
 				console.log($('input[id=jump]').val());
+				curPage = $('input[id=jump]').val() <= sumPage ? $('input[id=jump]').val() : undefined;
+				showPage(curPage);//调用展示方法
 				
 			});
+			//页码点击事件
+			$(document).on('click','.number',function(){
+				curPage = $(this).prop('id');
+				console.log(curPage)
+				showPage(curPage);//调用展示方法
+				
+			});
+			//首页按钮点击事件
+			$(document).on('click','.firstPage',function(){
+				goFirst();//调用跳首页方法
+				
+			})
+			//尾页按钮点击事件
+			$(document).on('click','.endPage',function(){
+				goLast();//调用跳尾页方法
+				
+			})
+			$(document).on('click','.beforePage',function(){
+				goPre();//调用上一页方法
+				
+			})
+			$(document).on('click','.afterPage',function(){
+				goAfter();//调用下一页方法
+				
+			})
+			
 		});
 	</script>
 </html>
