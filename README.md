@@ -10,3 +10,4 @@ on('click') 和 click() 还有 $(document).on('click')不同的地方$(document)
 Vue v-if 中当数组array.length > 0判断时当数组array未定义undefined会出现TypeError: Cannot read property 'length' of undefined
 需要在判断长度前再加上array !==undefined && 先判断是否是undefined; &&当前面的判断为false就直接返回不会执行到后面
 
+git 在git推送本地分支到远程分支时记得 git push -u origin/分支名,这样可以把本地分支和远程分支关联起来,如果出现Everything up-to-date有可能是没有提交add commit 或者直接commit -am‘’,但是还有种可能就是本地分支对远程没更新
