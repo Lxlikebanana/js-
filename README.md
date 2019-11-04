@@ -11,3 +11,5 @@ Vue v-if 中当数组array.length > 0判断时当数组array未定义undefined�
 需要在判断长度前再加上array !==undefined && 先判断是否是undefined; &&当前面的判断为false就直接返回不会执行到后面
 
 git 在git推送本地分支到远程分支时记得 git push -u origin/分支名,这样可以把本地分支和远程分支关联起来,如果出现Everything up-to-date有可能是没有提交add commit 或者直接commit -am‘’,但是还有种可能就是本地分支对远程没更新
+
+javascript不是多线程，同步异步操作，所有的异步操作会进入任务队列，在主线程栈中代码执行完后会去读取任务队列；主线程读取任务队列的过程是循环的，称为EventLoop事件循环
