@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>input光标始终在末尾</title>
+		<style>
+			.firstinput{
+				text-align: right;
+			}
+		</style>
+	</head>
+	<body>
+		<p>我收集到的方法</p>
+		<div>
+			<p>使用Vue框架</p>
+			<p>使用的是selection对象，说是vue其实和Vue关系不大</p>
+			<p>关于selection对象的问题会有专门的一个页面</p>
+			<p>Vue</p>
+			<div>
+				<div>first input</div>
+				<input type="text" id="firstway" v-model="inputdata1" placeholder="请输入" class="firstinput" @click="setEnd()"/>
+			</div>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script type="text/javascript" src="https://unpkg.com/vue"></script>
+	<!-- Vue方式 -->
+	<script>
+		var firstway = new Vue({
+			el:'#firstway',
+			data:{
+				inputdata1: ''
+			},
+			methods:{
+				setEnd: function(){
+					var firstway = document.querySelector('#firstway');
+					firstway.focus();
+					var length = 0;
+					length = this.inputdata1.length;
+					if(document.selection){
+						var rang = firstway.createTextRange()
+						range.moveStart('character',length);
+						range.collapse();
+						range.select();
+					}else if(typeof firstway.selectionStart === 'number' && typeof firstway.selectionEnd === 'number'){
+						firstway.selectionStart = firstway.selectionEnd = length;
+					}
+				}
+			},
+			watch:{
+				inputdata1: function(){
+					console.log(this.inputdata1.length ? this.inputdata1.length : 0);
+				}
+			}
+		})
+	</script>
+</html>
