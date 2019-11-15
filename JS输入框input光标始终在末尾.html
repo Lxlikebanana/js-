@@ -21,6 +21,11 @@
 				<input type="text" id="firstway" v-model="inputdata1" placeholder="请输入" class="firstinput" @click="setEnd()"/>
 			</div>
 		</div>
+		<div>
+			<div class="sel">
+				<p contenteditable="true" onclick="showsel()">小明在数1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28</p>
+			</div>
+		</div>
 	</body>
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script type="text/javascript" src="https://unpkg.com/vue"></script>
@@ -53,5 +58,15 @@
 				}
 			}
 		})
+	</script>
+	<script>
+		var sel = document.querySelector('.sel');
+		function showsel(){
+			sel.focus();
+			if(document.selection){
+				selection = document.selection;
+			}
+			console.log(selection.toString());
+		}
 	</script>
 </html>
