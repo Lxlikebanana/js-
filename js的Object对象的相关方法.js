@@ -152,7 +152,27 @@ var P = function(){};
 var p = new P();
 
 var C = function(){};
-C.prototype = p;
+C.prototype = p;//生成实例的原型对象就是p
 var c = new C();
 c.constructor.prototype === p//false
+//出现这种情况是因为c.constructor通常会在原型对象上找到constructor属性而这里c实例的原型对象被修改成一个实例对象p
+//这个实例对象p上也没有constructor属性,会继续向上找找到实例p的原型对象里面的constructor属性
+//这时才找到constructor属性而constructor属性是p的构造P,P的prototype属性是存在的所以会等于P.prototype
+
+//通常: c.constructor ——> C.prototype.constructor ——> C();接下来是c.constructor.prototype ——> C.prototype
+//这里: c.constructor ——> p.__proto__(.constructor) ——> P.prototype.constructor ——> P();接下来c.constructor.prototype ——> P.prototype
+
+//简单的来讲就是你的原型对象修改之后可能没有constructor属性需要去向原型链上找所以constructor.prototype不一定是指向你的原型对象
+
+//首先c是个实例对象里面的constructor属性是向原型链上的原型对象找的,是c的原型对象c.__proto__指向的C.prototype里面的
+//但是C.prototype也是一个实例p,那么会继续向p的原型链上找p.__proto__是P.prototype里的constructor里指向的是P
+//c.constructor.prototype相当于P.prototype === p.__proto__
+//通常情况下:
+//实例对象o.__proto__就是对象o的原型对象;生成o的构造函数O的prototype属性里指向的也是o的原型对象(在O.prototype没修改时)
+//而o.constructor.prototype,绕一圈也是o的原型对象(但是当原型对象修改了这里的值就不对了就不指向c的原型对象了)
 //prototype和__proto__的不同,见专门笔记
+//综上__proto__内部属性且只有浏览器才需要部署不推荐使用;而obj.constructor.prototype可能在修改后指向的不是原型对象会失效
+//重要的来了说了这么多就是这句,推荐使用Object.getPrototypeOf()方法来获取原型对象
+
+//那怎么才能让obj.constructor.prototype正确指向原型对象呢
+
