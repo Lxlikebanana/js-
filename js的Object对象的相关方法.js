@@ -175,4 +175,89 @@ c.constructor.prototype === p//false
 //重要的来了说了这么多就是这句,推荐使用Object.getPrototypeOf()方法来获取原型对象
 
 //那怎么才能让obj.constructor.prototype正确指向原型对象呢
+var P = function(){};
+var p = new P();
 
+var C = function(){};
+C.prototype = p;
+C.prototype.constructor = C;//通常在改变原型对象的时候同时要设置constructor属性,指向原来构造函数就行了这样
+
+var c = new C();
+c.constructor.prototype === p;//true 这里c去原型找constructor,c的原型是C.prototype,这个里面有里constructor因为之前设置过了是C这样C.prototype就是p了
+//对原型对象进行修改的时候,通常也要设置constructor属性
+
+
+/*Object.getOwnPropertyNames(),别忘了s*/
+//这个Object静态方法返回一个数组,成员是参数对象本身的所有属性的键名
+Object.getOwnPropertyNames(Date)//["parse","arguements","UTC","caller","name","prototype","now","length"]
+//Object.getOwnPropertyNames方法返回Date所有自身的属性名
+//对象本身的属性之中,有的是可遍历的(enumerable),有的是不可遍历的;Object.getOwnPropertyNames方法能返回所有键名不管是否是可遍历的;
+//如果只需要获取那些可以遍历的属性,需要使用Object.keys方法,
+Object.keys(Date)//[]
+//上面代码表明,Date对象所有自身的属性,都是不可遍历的
+
+
+/*Object.prototype.hasOwnProperty()*/
+//对象实例的hasOwnProperty方法返回一个布尔值,用于判断某个属性定义在对象身上还是定义在原型链上
+Date.hasOwnProperty('length')//true 是自身属性,构造函数Date可以接受多少个参数
+Date.hasOwnProperty('toString')//false 是继承的属性
+//重点来了!!!参考材料里指出hasOwnProperty方法是js中唯一一个处理对象属性时不会遍历原型链的方法
+//那Object.getOwnPropertyNames()这个好像也不遍历原型链因为这个是Object自己的静态方法,不会遍历原型链
+
+
+/*in运算符和for in循环*/
+//in运算符返回一个布尔值,表示一个对象是否具有某个属性.它不区分这个属性时自己的还是继承的
+//要分辨请使用上面说的hasOwnProperty方法
+'length' in Date//true
+'toString' in Date//true
+//in运算符常用于检查一个属性是否存在
+//获得对象的可遍历属性(不管是自身的还是继承的),可以使用for...in..循环(可遍历才行) 
+var o1 = {p1: 123};
+var o2 = Object.create(o1,{
+	p2:{
+		value: 'abc',
+		enumerable: true
+	}
+	});
+for (p in o2){    //p里面是键名,类型是string
+	console.info(p)
+}	
+//输出p2 p1
+//上面可以看出for in可以遍历出继承的属性
+//如果只要自身的属性那就加个判断用hasOwnProperty()方法先判断在输出
+
+//下面函数获取对象所有属性名,不论是不是自身的还是继承的(遍历了原型链),不管是不是可枚举的(getOwnProperty)
+function inheritedPropertyNames(obj){
+	var props = {};
+	while(obj){
+		Object.getOwnPropertyNames(obj).forEach(function(p){//forEach方法对数组遍历操作的方法详细见其他还有map方法的区别
+			props[p] = true;//你随意赋值只要属性名的
+		});
+		obj = Object.getPrototypeOf(obj);
+	}
+	return Object.getOwnPropertyNames(props);
+}
+
+//对象拷贝,详见其他深浅拷贝
+//如果要拷贝一个对象,需要做到下面两件事
+//1.确保拷贝后的对象,与原对象具有同样的原型
+//2.确保拷贝后的对象,与原对象具有同样的实例属性
+function copyOwnPropertiesFrom(target, source){
+	Object.getOwnPropertyNames(source).forEach(function(propKey){   //拿到自身的属性名
+		var desc = Object.getOwnPropertyDescriptor(source, propKey); //拿到属性名对的属性值
+		Object.defineProperty(target, propKey, desc);                //把属性放进被拷贝的对象里
+	});
+	return target;
+}
+
+function copyObject(orig){
+	var copy = Object.create(Object.getPrototypeOf(orig));//一样的原型对象create里第一个参数就是原型对象,orig里的自身属性还没有
+	copyOwnPropertiesFrom(copy,orig);    //相同的实例属性
+	return copy;
+}
+
+//更简便的方法
+//利用Object.getOwnPropertyDescriptors方法比上面多个s
+function copyObject(orig){
+	return Object.create(Object.getPrototypeOf(orig),Object.getOwnPropertyDescriptors(orig))//create第二个参数
+}

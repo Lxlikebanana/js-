@@ -3,6 +3,7 @@
 //普通对象和函数
 //prototype和__proto__的区别,以及它们直接有什么联系
 //首先来看prototype,这个是函数特有的属性,函数特有的,函数特有,是的这个是函数特有的属性是Function的静态属性
+//每个函数都会有一个prototype属性，这个属性是一个指针，指向一个对象，记住只有函数才有,并且通过bind()绑定的也没有。
 //而__proto__是对象特有的属性,其实函数也是对象,是对象,对象;所以这个属性函数也有也有也有
 //__proto__这个属性只有浏览器才需要部署,其他环境可能没有,但是没有关系因为都在浏览器上肯定有的
 //所以对于这两个属性的区别只有在对象是函数的情况下我们需要区分,因为不是函数的普通对象没有prototype这个属性
@@ -61,7 +62,7 @@ function B(){this.x = 2}
 
 var obj = new B();
 var a1 = new A();
-a1.__proto__ === A.prototype;
+a1.__proto__ === A.prototype;   //改变原型对象会影响到构造函数
 A.prototype = obj;//把A.prototype改成 obj这样的实例对象
 //之前说的prototype里面会有constructor,但是obj是个普通对象莫得constructor会去向原型链上找obj的原型对象是B.prototype,
 //这里的constructor是B()

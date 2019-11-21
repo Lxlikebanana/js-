@@ -1,4 +1,4 @@
-//构造函数的继承 来自https://wangdoc.com/javascript/oop/prototype.html对象的继承笔记
+//构造函数的继承 来自https://wangdoc.com/javascript/oop/prototype.html对象的继承笔记,浅显的理解
 //让一个构造函数来继承另一个构造函数
 //分成两步来实现;第一步是在子类的构造函数中,调用父类的构造函数;ps.es5里没有类的概念只是文法上这么描述
 function Super(){
