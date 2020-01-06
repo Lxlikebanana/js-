@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>test</title>
+		<style>
+			.couponListBlock_left::before{
+				background-color:#fae150;
+			}
+			.couponListBlock_left::after{
+				background-color:#fae150;
+			}
+			.couponListBlock_left .couponListBlock_left_xiamiandeyuan::before{
+				background-color:#fae150;
+			}
+			.couponListBlock_left .couponListBlock_left_xiamiandeyuan::after{
+				background-color:#fae150;
+			}
+		</style>
+		<style>
+			.container{
+				width: 31.25rem;
+				border: solid 1px #00FFFF;
+				height: 50rem;
+			}
+			.block{
+				width: 12.5rem;
+				height: 12.5rem;
+				border: #ADD8E6 solid 1px;
+			}
+			.block_1::after{
+				content: '>';
+				text-align: center;
+				position: absolute;
+				width: 1rem;
+				height: 1rem;
+				left: 15%;
+				top: auto;
+				border: 1px solid #90EE90;
+				/* background: url("http://fs1.weicheche.cn/station_album/origin/20171123193709_5a16b2e560402.png"); */
+				transform: rotate(90deg);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="block">block1</div>
+			<div class="block block_1">block2</div>
+			<div class="block">block3</div>
+		</div>
+		<div id="app1">
+			<template v-if="arr.length > 0" v-for="item,index in arr">
+				<div v-if="index > 2 ? !Number(hasfold) : 1">{{item}}</div>
+			</template>
+			<div class="btn_fold" v-if="arr.length > 3"
+			 v-bind:hasfold="Number(hasfold)" 
+			 v-html="hasfold ? '点击展开' : '点击收起'"
+			 v-on:click="ev_fold"></div>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+		var $app1 = new Vue({
+			el:'#app1',
+			data:{
+				arr:[0,1,2,3,4,5,6,7,8,9],
+				hasfold: 1,
+			},
+			mounted: function(){
+				
+			},
+			methods:{
+				ev_fold: function(){
+					this.hasfold = !this.hasfold;
+				}
+			}
+		});
+	</script>
+	<script>
+		/***jq入口函数作用域***/
+		var a;
+		$(function(){
+			a = 123;
+		});
+		$(function(){
+			// setTimeout(function(){
+				console.log(a);
+			// },0);
+			
+		});
+	</script>
+</html>
+

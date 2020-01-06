@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>二维码qrcode.js</title>
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="jquery.qrcode.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<style>
+			.yuanbianjuxing{
+				width: 80px;
+				height: 45px;
+				border: 1px #00FFFF solid;
+				
+			}
+			li{
+				list-style: none;
+			}
+			#qr_display{
+				text-align: center;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="qrcode1"></div>
+		<div id="app" v-html="val1.length"></div>
+		<div class="yuanbianjuxing">111111111</div>
+		<div id="app1">
+			<div v-for="item in val2">
+				<div>{{item.name}}</div>
+				<div v-bind:id="item.str"></div>
+			</div>
+		</div>
+		<ul>
+			<li id="qr_display">
+				<div id="text_content"><span>请出示二维码取货</span></div>
+				<div id="qr_content"></div>
+			</li>
+		</ul>
+	</body>
+	<script>
+		$(function(){
+			var qr_width = $(document.querySelector('#text_content span')).width();
+			$('#qr_content').qrcode({
+				render: "canvas",
+				text: 'test qrcode',
+				width: qr_width,
+				height: qr_width
+			})
+			
+			var app1 = new Vue({
+				el: '#app',
+				data: {
+					val1: []
+				},
+			});
+			setTimeout(function(){
+				app1.val1 = [1,2,4,5];
+			},1000)
+			var app = new Vue({
+				el:'#app1',
+				data:{
+					val2:[
+						{
+							name: '1',
+							str: 'first_qrcode'
+						},
+						{
+							name: '2',
+							str: 'second_qrcode'
+						}
+					]
+				},
+				mounted: function(){
+					var That = this;
+					this.showQrcode(this.val2);
+				},
+				methods:{
+					showQrcode: function(_item){
+						_item.forEach((item)=>{
+							var qrshow = $(document.querySelector('#' + item.str));
+							console.log(qrshow[0]);
+							qrshow.qrcode(item.str);
+						})
+					}
+				}
+			})
+		})
+	</script>
+</html>

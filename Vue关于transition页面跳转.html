@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<title>Vue之transition</title>
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 		<!-- 2.自定义两组样式，来控制transition内部的元素实现动画 -->
 		<style>
 			/* v-enter 是进入之前，元素的起始状态 */
@@ -120,6 +121,10 @@
 				</transition>
 			</div>
 			
+			<div class="testappd" id="testapp" style="display: none;" v-show="isshow">
+				<div v-on:click="hidee">{{valuei}}</div>
+				<div class="notosee" style="display: none;">2132151255413</div>
+			</div>
 		
 		
 		<script>
@@ -235,6 +240,33 @@
 			}
 		});
 	</script>
-	
+	<script>
+		$(function(){
+			var i = 0;
+			var showif = 0;
+			setTimeout(function(){
+				i = 100000;
+				testapp._data.valuei = i;
+				testapp._data.isshow = 1;
+			},4000);
+			var testapp = new Vue({
+				el:'#testapp',
+				data:{
+					valuei : i,
+					isshow : 0
+				},
+				watch:{
+					valuei: function(val){
+						console.log(val)
+					}
+				},
+				methods:{
+					hidee : function(){
+						$(document.querySelector('#testapp')).hide();
+					}
+				}
+			});
+		})	
+	</script>
 	
 </html>

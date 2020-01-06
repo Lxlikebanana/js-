@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>带值跳转2</title>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+		<style>
+			.typecontent{
+				border: #00FFFF 1px solid;
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div>使用$.query.get来获取值</div>
+		</div>
+		<div>底下用来展示带过来的值type</div>
+		<div class="typecontent"></div>
+	</body>
+	<script>
+		$(function(){
+			var $typecont = $(document.querySelector('.typecontent'));
+			if($.get('type')){
+				var typeval = $.get('type');
+				$typecont.html('type = ' + typeval)
+			}
+		})
+	</script>
+</html>

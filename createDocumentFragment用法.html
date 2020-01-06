@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>document.createDocumentFragment的用法</title>
+		<style>
+			ul{
+				list-style: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div>document.createDocmentFragment的用法,这里是因为在为了减少回流和重绘次数先使用这个将要插入的节点先构建一个新的子树把所有的节点都生成完之后再一次插入主DOM树中去</div>
+		<ul id="list">
+			<li>下面是js添加</li>
+		</ul>
+		<div class="btn">点击</div>
+	</body>
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+		var ul = document.getElementById("list");
+		var _frag = document.createDocumentFragment();
+		for(i = 0; i < 10; i++){
+			var li = document.createElement("li");
+			li.innerHTML = "index: " + i;
+			_frag.appendChild(li);
+		}
+		var i = 0;
+		ul.appendChild(_frag);
+		$('.btn').on('click',debounce(printsth,500))
+		function debounce(fn,delay){
+			var timer = null;
+			return function(){
+				var context = this;
+				console.log("context: " + context);
+				console.log("timer: " + timer);
+				clearTimeout(timer);
+				timer = setTimeout(function(){
+					fn.apply(context,["debounce checked"]);
+				},delay);
+				console.log("timer two : " + timer)
+			}
+		}
+		function printsth(comments){
+			console.log("this in printsth: " + this);
+			console.log("comments in printsth: " + comments);
+			console.log("------------------" + (i++) + "------------------");
+		}
+		// var t = null;
+		// t = setInterval(function(){
+		// 	debounce(printsth,500)()
+		// },1000);
+		// var t2 = setTimeout(function(){
+		// 	clearInterval(t);
+		// },10000)
+		
+		
+	</script>
+</html>

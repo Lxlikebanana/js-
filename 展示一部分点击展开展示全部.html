@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>show part show all</title>
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<style>
+			.content[hashide="1"]{
+				height: 7.25rem;
+				overflow: hidden;
+			}
+			.content[hashide="0"]{
+				height: auto;
+				overflow: auto;
+			}
+			.btn{
+				cursor: pointer;
+			}
+			.btn::after{
+				content: '>';
+				position: absolute;
+				transform:rotate(90deg);
+				-ms-transform:rotate(90deg); /* IE 9 */
+				-moz-transform:rotate(90deg); /* Firefox */
+				-webkit-transform:rotate(90deg); /* Safari and Chrome */
+				-o-transform:rotate(90deg); /* Opera */
+			}
+			.btn[hasfolder="0"]{
+				transform:rotate(-90deg);
+				-ms-transform:rotate(-90deg); /* IE 9 */
+				-moz-transform:rotate(-90deg); /* Firefox */
+				-webkit-transform:rotate(-90deg); /* Safari and Chrome */
+				-o-transform:rotate(-90deg); /* Opera */
+			}
+			.p_content[hasfolder="1"]{
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="part_one">
+			<div>显示的部分</div>
+			<div id="hidediv" style="display:none;">隐藏的部分</div>
+			<a href="javascript:void(0);" id="open">点击展开</a>
+		</div>
+		<div class="part_two">
+			<div class="content" v-bind:hashide="1">
+				<p>------------1-----------</p>
+				<p>------------2-----------</p>
+				<p>------------3-----------</p>
+				<p>------------4-----------</p>
+				<p>------------5-----------</p>
+				<p>------------6-----------</p>
+				<p>------------7-----------</p>
+				<p>------------8-----------</p>
+				<p>------------9-----------</p>
+				<p>-----------10-----------</p>
+				<p>-----------11-----------</p>
+				<p>-----------12-----------</p>
+			</div>
+			<div class="btn" v-on:click="ev_folderextends" hasfolder="1">点击展开</div>
+		</div>
+		<div id="app"> 
+			<div class="p_content" v-bind:hasfolder="1">
+				<template v-for="item in items">
+					<div class="p_block">{{item}}</div>
+				</template>		
+			</div>
+			<div class="p_btn" v-on:click="ev_folderextends">点击展开</div>
+			<input type="text" v-model="val" />
+		</div>
+		<div id="app2">
+			
+			<div>{{mod}}</div>
+			
+		</div>
+	</body>
+	<script>
+		$(function(){
+			$('#open').on('click',function(){
+				$('#hidediv').toggle();
+			});
+			
+			var app = new Vue({
+				el:'#app',
+				data:{
+					items:[
+						1,2,3,4,5,
+					],
+					val: '',
+				},
+				mounted:function(){
+					var block_height = $(document.querySelector('.p_block')).height();
+					$(document.querySelector('.p_content[hasfolder="1"]')).css('height',block_height * 3);
+				},
+				methods:{
+					ev_folderextends: function(){
+						var _block_height = $(document.querySelector('.p_block')).height();
+						var _height = this.items.length * _block_height;
+						if($('.p_content').attr('hasfolder') == 1){
+							$('.p_content').css('height',_height);
+							$('.p_content').attr('hasfolder','0');
+							$('.p_btn').html('点击收起');
+							console.log($('.p_content')[0]);
+						}else{
+							$('.p_content').css('height',_block_height * 3);
+							$('.p_content').attr('hasfolder','1');
+							$('.p_btn').html('点击展开');
+							console.log($('.p_content').attr('hasfolder'));
+						}
+					},
+					
+				},
+				watch:{
+					val:function(val){
+						app1.mod = val;
+					},
+					
+				}
+				
+			});
+			var app1 = new Vue({
+				el: '#app2',
+				data:{
+					mod: '',
+				},
+				watch:{
+					mod:function(val){
+						console.log(val);
+					}
+				}
+			});
+			$('.btn').on('click',function(){
+				if($('.content').attr('hashide') == 1){
+					$('.content').attr('hashide','0');
+					console.log($('.content')[0]);
+				}else{
+					$('.content').attr('hashide','1');
+					console.log($('.content').attr('hashide'));
+				}		
+				
+			})
+		});
+	</script>
+</html>

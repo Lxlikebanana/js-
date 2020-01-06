@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>带值跳转1</title>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+		<style>
+			.type{
+				border: lightblue 1px solid;
+			}
+			.btn-go{
+				display: inline-block;
+				border: lightgreen 1px solid;
+				border-radius: 3px;
+				padding: 2px 3px;
+			}
+			.btn-go:hover{
+				cursor: pointer;
+			}
+			.btn-go:active{
+				background: #90EE90;
+			}
+			.content1[isshow="0"]{
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div>页面带值跳转?'键名'='键值'</div>
+		<input type="text" name="type" class="type" />
+		<div class="btn-go">跳转至2带type值</div>
+		<div class="content1" isshow="1">1111111111</div>
+		
+	</body>
+	<script>
+		$(function(){
+			var $typeinput = $(document.querySelector('input[name="type"]')),
+				$btngo = $(document.querySelector('.btn-go'));
+			$btngo.on('click',function(){
+				// if($typeinput.val()){
+				// 	window.location.href = 'page2receive.html?' + 'type=' + $typeinput.val();
+				// }else{
+				// 	alert('pls input sth');
+				// }
+				if($(document.querySelector('.content1')).attr('isshow') == 1){
+					$(document.querySelector('.content1')).attr('isshow','0');
+				}else{
+					$(document.querySelector('.content1')).attr('isshow','1');
+				}
+				
+			})
+		})
+	</script>
+</html>
