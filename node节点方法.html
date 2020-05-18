@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+		<style>
+			
+			.ul1{
+				list-style: none;
+				overflow: auto;
+			}
+			.fullsc{
+				position: absolute;
+				z-index: -1;
+				height: 100%;
+				width: 100%;
+				top: 0;
+				background-color: rgba(255, 0, 255, 0.1);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="containerul">
+			<ul class="ul1">
+				<li id="li1">1</li>
+				<li id="li2">2<div style="display: inline-block;">2222222</div></li>
+				<li id="li3">3</li>
+				<li id="li4">4</li>
+				<li id="li5">5</li>
+			</ul>
+		</div>
+		<div>
+			<input type="text" id="dadad" accesskey="h" />
+		</div>
+		<!-- <div class="fullsc"></div> -->
+			
+		<div class="editable" contenteditable="true"></div>
+		<div class="DOMorSelector" id="older">123</div>
+		<iframe src="//player.bilibili.com/player.html?aid=88994230&cid=152016710&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+		<!-- <iframe id="editor" src="about:blank"></iframe> -->
+	</body>
+	<script>
+		var ul1 = document.querySelector('.ul1');
+		var l1 = document.querySelector('#li1');
+		var l2 = document.querySelector('#li2');
+		
+		var a1 = document.querySelector('.DOMorSelector');
+		var a2 = document.getElementsByClassName('DOMorSelector');
+		
+		console.log(a1);
+		console.log(a2);
+		
+		var divNew1 = document.createElement('div');
+		divNew1.innerHTML = '8888';
+		divNew1.className = 'DOMorSelector';
+		document.getElementById('older').before(divNew1);
+		divNew1.appendChild(document.createTextNode('<span>Foo & bar</span>'));
+		console.log(divNew1.innerHTML);
+		
+		var divNew2 = document.createElement('DIV');
+		
+		
+		$(function(){
+			var nodelistd = ul1.childNodes;
+			for(i = 0; i < nodelistd.length; i++){
+				console.dir(nodelistd[i]);
+			}
+			console.log(i);
+			
+			ul1.append(l1);
+			
+			// var editor = document.getElementById('editor');
+			// editor.contentDocument.designMode = 'on';
+		});
+		
+		//迭代器部分迭代子元素
+		//document.createNodeIterator方法返回一个“遍历器”对象（NodeFilter实例）。该实例的nextNode()方法和previousNode()方法，可以用来遍历所有子节点。
+		(function(){
+			var nodeIterator = document.createNodeIterator(document.querySelector('.containerul'),NodeFilter.SHOW_ELEMENT);
+			var curNode;
+			var par = [];
+			while(curNode = nodeIterator.nextNode()){
+				par.push(curNode);
+				console.log('----',curNode);
+			}
+			
+			var nodeBodyIterator = document.createNodeIterator(document.body,NodeFilter.SHOW_ELEMENT);
+			//新的迭代器第一个节点总是返回根节点
+			
+		})();
+		//迭代器总是从根节点开始，但是输出是静态的？上面js操作将li1位置调整至ul末尾而迭代器输出时却是仍在第一个？
+		
+		//document.createTreeWalker方法返回一个 DOM 的子树遍历器
+		//它与document.createNodeIterator方法基本是类似的，区别在于它返回的是TreeWalker实例，后者返回的是NodeIterator实例
+		//另外，它的第一个节点不是根节点
+		;(function(){  //前面的;如果之前没加;会报错所以不管之前加没加在立即执行前加一个;比较保险
+			
+			var nodeTreeWalker = document.createTreeWalker(document.body,NodeFilter.SHOW_ELEMENT);
+			var curNode;
+			var par = [];
+			while(curNode = nodeTreeWalker.nextNode()){
+				par.push(curNode);
+				console.log('+++++',curNode);
+			}
+			
+		})();
+		
+		//document.designMode这个接口以后研究
+			
+		//var nodeadpot = document.adoptNode(document.querySelector('#older'));	
+	</script>
+</html>
